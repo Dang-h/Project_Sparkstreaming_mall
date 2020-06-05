@@ -21,8 +21,7 @@
         <module>mall_mock</module>
         <module>mall_logger</module>
         <module>mall_realtime</module>
-        <module>mall_publisher</module>
-        <module>mall_canal</module>
+        <module>mall_realtime</module>
     </modules>
 
     <properties>

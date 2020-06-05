@@ -26,7 +26,7 @@ public class LogUploader {
 			//允许上传数据
 			conn.setDoOutput(true);
 			//设置请求的头信息,设置内容类型为JSON
-			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			conn.setRequestProperty("Content-Type", "realtime.application/x-www-form-urlencoded");
 
 			System.out.println("upload" + log);
 
