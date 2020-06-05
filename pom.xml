@@ -21,7 +21,7 @@
         <module>mall_mock</module>
         <module>mall_logger</module>
         <module>mall_realtime</module>
-        <module>mall_realtime</module>
+        <module>mall_publisher</module>
     </modules>
 
     <properties>
@@ -33,6 +33,7 @@
         <fastjson.version>1.2.47</fastjson.version>
         <httpclient.version>4.5.5</httpclient.version>
         <httpmime.version>4.3.6</httpmime.version>
+        <phoenix-spark.version>4.14.3-HBase-1.4</phoenix-spark.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -114,6 +115,14 @@
                 <artifactId>spark-streaming-kafka-0-10_2.11</artifactId>
                 <version>${spark.version}</version>
             </dependency>
+
+            <!--Phoenix依赖，用于将数据导入HBase-->
+            <dependency>
+                <groupId>org.apache.phoenix</groupId>
+                <artifactId>phoenix-spark</artifactId>
+                <version>${phoenix-spark.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

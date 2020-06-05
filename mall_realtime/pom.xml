@@ -49,7 +49,6 @@
         <dependency>
             <groupId>org.apache.phoenix</groupId>
             <artifactId>phoenix-spark</artifactId>
-            <version>4.14.3-HBase-1.4</version>
         </dependency>
 
         <dependency>
