@@ -17,15 +17,14 @@ public class LoggerController {
 
 	//声明kafka接口
 	//自动实现接口方法
-	@Autowired
-	KafkaTemplate<String, String> kafkaTemplate;
+//	@Autowired
+//	KafkaTemplate<String, String> kafkaTemplate;
 
 	//处理请求/log?
 	//http://logserver/log?logString={}
 	@PostMapping("log")
 	public String doLog(@RequestParam("logString") String logString) {
 
-		// 0 补充时间戳
 		//转换成JSON对象
 		JSONObject jsonObject = JSON.parseObject(logString);
 		//补充时间戳ts
@@ -39,11 +38,11 @@ public class LoggerController {
 
 		// 2 推送到kafka
 		//“startup”写前可防止空指针
-		if ("startup".equals(jsonObject.getString("type"))) {
-			kafkaTemplate.send(MallConstants.KAFKA_TOPIC_STARTUP, jsonString);
-		} else {
-			kafkaTemplate.send(MallConstants.KAFKA_TOPIC_EVENT, jsonString);
-		}
+//		if ("startup".equals(jsonObject.getString("type"))) {
+//			kafkaTemplate.send(MallConstants.KAFKA_TOPIC_STARTUP, jsonString);
+//		} else {
+//			kafkaTemplate.send(MallConstants.KAFKA_TOPIC_EVENT, jsonString);
+//		}
 
 		return "success";
 	}

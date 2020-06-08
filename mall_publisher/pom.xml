@@ -33,6 +33,19 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.phoenix</groupId>
+            <artifactId>phoenix-core</artifactId>
+            <version>4.14.2-HBase-1.3</version>
+        </dependency>
+
+        <!--google工具包，处理字符串，日期实用工具-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>20.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql_2.11</artifactId>
         </dependency>

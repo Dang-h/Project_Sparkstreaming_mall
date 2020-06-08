@@ -30,14 +30,13 @@ public class RandomOptionGroup<T> {
 	}
 
 
-	public static void main(String[] args) {
-		RanOpt[] opts = {new RanOpt("zhang3", 20), new RanOpt("li4", 30), new RanOpt("wang5", 50)};
-		RandomOptionGroup randomOptionGroup = new RandomOptionGroup(opts);
-		for (int i = 0; i < 10; i++) {
-			System.out.println(randomOptionGroup.getRandomOpt().getValue());
-		}
-
-	}
+//	public static void main(String[] args) {
+//		RanOpt[] opts = {new RanOpt("zhang3", 20), new RanOpt("li4", 30), new RanOpt("wang5", 50)};
+//		RandomOptionGroup randomOptionGroup = new RandomOptionGroup(opts);
+//		for (int i = 0; i < 10; i++) {
+//			System.out.println(randomOptionGroup.getRandomOpt().getValue());
+//		}
+//	}
 
 }
 

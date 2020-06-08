@@ -69,10 +69,19 @@ public class JsonMocker {
 
 	RandomOptionGroup<Boolean> isQuitGroup = new RandomOptionGroup(quitOpts);
 
+
 	public JsonMocker() {
 
 	}
 
+	/**
+	 * 自定义日志生成时间
+	 *
+	 * @param startTimeString 开始时间
+	 * @param endTimeString 结束时间
+	 * @param startupNum 启动日志数量
+	 * @param eventNum 事件日志数量
+	 */
 	public JsonMocker(String startTimeString, String endTimeString, int startupNum, int eventNum) {
 		try {
 			startTime = new SimpleDateFormat("yyyy-MM-dd").parse(startTimeString);
@@ -145,7 +154,7 @@ public class JsonMocker {
 		String initStartupLog () {
 
 			//mid编号为1-500随机数
-			String mid = "mid_" + RandomNum.getRandInt(1, 50);
+			String mid = "mid_" + RandomNum.getRandInt(1, 500);
 			String uid = "uid_" + RandomNum.getRandInt(1, 500);
 			String os = osOptionGroup.getRandomOpt().getValue();
 			String appid = this.appId;
@@ -182,7 +191,7 @@ public class JsonMocker {
 					jsonMocker.sendLog(eventLog);
 				}
 				try {
-					Thread.sleep(500);
+					Thread.sleep(70);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

@@ -13,5 +13,6 @@
 |mall_common|公用模块，存放项目使用的常量|
 |mall_logger|日志采集模块|
 |mall_mock|模拟日志生成模块|
-|mall_publisher|灵活查询数据接口模块|
+|[mall_publisher](mall_publisher/mall_publisher.md)|灵活查询数据接口模块|
 |mall_realtime|实时处理模块|
+|mall_canal|canal客户端，用于同步业务数据库中的数据|
