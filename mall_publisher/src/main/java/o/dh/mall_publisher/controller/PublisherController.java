@@ -1,7 +1,7 @@
-package mall_publisher.controller;
+package o.dh.mall_publisher.controller;
 
 import com.alibaba.fastjson.JSON;
-import mall_publisher.service.PublisherService ;
+import o.dh.mall_publisher.service.PublisherService;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +16,10 @@ import java.util.*;
 @RestController
 public class PublisherController {
 
-	//controller调用service
 	@Autowired
 	PublisherService publisherService;
 
+	// http://logserver:8099/realtime-total?date=2020-06-09
 	//查询使用GetMapping，路径为：realtime-total
 	//读入传入参数date
 	@GetMapping("realtime-total")
@@ -60,65 +60,58 @@ public class PublisherController {
 		return JSON.toJSONString(totalList);
 	}
 
-	//统计分时数据
 	@GetMapping("realtime-hour")
-	public String getRealtimeHour(@RequestParam("id") String id, @RequestParam("date") String tdate){
-
-		// 判断需要查询的业务分时统计
-		if ("dau".equals(id)){
-			//获取今天分时数据
+	public  String getRealtimeHour(@RequestParam("id") String id,@RequestParam("date")String tdate){
+		if("dau".equals(id)){ // dau的分时统计
+	// http://logserver:8099/realtime-hour?id=dau&date=2020-06-09
 			Map<String, Long> dauHourCountTodayMap = publisherService.getDauHourCount(tdate);
 
-			//获取昨天时间
 			String ydate = getYesterdayString(tdate);
-
-			//获取昨天分时数据
 			Map<String, Long> dauHourCountYDayMap = publisherService.getDauHourCount(ydate);
 
-			// 大Map包着小Map
-			// 数据格式：{"yesterday":{"11":383,"12":123,"17":88,"19":200 },"today":{"12":38,"13":1233,"17":123,"19":688 }}
-			Map dauMap = new HashMap();
+			Map dauMap=new HashMap();
 
-			dauMap.put("today", dauHourCountTodayMap);
-			dauMap.put("yesterday", dauHourCountYDayMap);
+			dauMap.put("today",dauHourCountTodayMap);
+			dauMap.put("yesterday",dauHourCountYDayMap);
 
-
-			//转换成Json返回
 			return JSON.toJSONString(dauMap);
-		} else if ("order_amount".equals(id)){
+		}else if("order_amount".equals(id)){ // 订单金额分时统计
+			// http://logserver:8099/realtime-hour?id=order_amount&date=2020-06-09
 			Map<String, Double> orderHourAmountTodayMap = publisherService.getOrderHourAmount(tdate);
 
-			String ydate = getYesterdayString(tdate);
-			Map<String, Double> orderHourAmountYDayMap = publisherService.getOrderHourAmount(ydate);
-			Map orderAmountMap = new HashMap();
+			String yDate = getYesterdayString(tdate);
+			Map<String, Double> orderHourAmountYDayMap = publisherService.getOrderHourAmount(yDate);
 
-			orderAmountMap.put("today", orderHourAmountTodayMap);
-			orderAmountMap.put("yesterday", orderHourAmountYDayMap);
+			Map orderAmountMap=new HashMap();
+
+			orderAmountMap.put("today",orderHourAmountTodayMap);
+			orderAmountMap.put("yesterday",orderHourAmountYDayMap);
 
 			return JSON.toJSONString(orderAmountMap);
 		}
 
 		return null;
+
 	}
 
 	/**
-	 * 获取昨天日期
+	 * 根据传入日期获取前一天时间
 	 * @param todayString 当天日期
 	 * @return
 	 */
-	private  String getYesterdayString(String todayString){
-
+	private String getYesterdayString(String  todayString){
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-		String yesterdayString = null;
+		String yesterdayString=null;
 		try {
 			Date today = dateFormat.parse(todayString);
 			Date yesterday = DateUtils.addDays(today, -1);
 			yesterdayString = dateFormat.format(yesterday);
+
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		return  yesterdayString;
 
-		return yesterdayString;
 	}
+
 }

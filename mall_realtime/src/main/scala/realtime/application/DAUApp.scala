@@ -18,6 +18,9 @@ import realtime.bean.StartUp
 import realtime.util.{MyKafkaUtil, RedisUtil}
 import redis.clients.jedis.Jedis
 
+/**
+ * 读取日志，分析日活
+ */
 object DAUApp {
 	def main(args: Array[String]): Unit = {
 		val sparkConf: SparkConf = new SparkConf().setAppName("dau_app").setMaster("local[*]")
@@ -107,9 +110,26 @@ object DAUApp {
 		}
 
 		// 通过Phoenix将数据存入HBase
+		/*
+		create table mall_dau
+			(
+			mid varchar,
+			uid varchar,
+			appid varchar,
+			area varchar,
+			os varchar,
+			ch varchar,
+			type varchar,
+			vs varchar,
+			logDate varchar,
+			logHour varchar,
+			ts bigint
+			CONSTRAINT dau_pk PRIMARY KEY ( mid , logDate )
+		);
+		 */
 		filteredDStream2.foreachRDD {
 			rdd => {
-				rdd.saveToPhoenix("USER.MALL_DAU",
+				rdd.saveToPhoenix("MALL_DAU",
 					Seq("MID", "UID", "APPID", "AREA", "OS", "CH", "TYPE", "VS", "LOGDATE", "LOGHOUR", "TS"),
 					new Configuration, Some("hadoop100,hadoop101,hadoop102:2181")
 				)

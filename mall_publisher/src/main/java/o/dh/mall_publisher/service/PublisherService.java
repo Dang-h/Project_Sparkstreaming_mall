@@ -1,6 +1,7 @@
-package mall_publisher.service;
+package o.dh.mall_publisher.service;
 
 import java.util.Map;
+
 
 public interface PublisherService {
 

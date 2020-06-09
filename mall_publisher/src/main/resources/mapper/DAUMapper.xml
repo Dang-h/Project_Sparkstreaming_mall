@@ -2,14 +2,14 @@
 <!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <!--namespace：需要实现的类-->
-<mapper namespace="mall_publisher.mapper.DAUMapper">
+<mapper namespace="o.dh.mall_publisher.mapper.DAUMapper">
     <!--  id：需要实现的方法名； resultType：定义传出的类型（Java类型），一个值为resultType，多个值为resultMap  -->
     <select id="getDauTotal" resultType="java.lang.Long">
-        select count(*) cnt from USER.mall_dau where logdate=#{date}
+        select count(*) cnt from MALL_DAU where logdate=#{date}
     </select>
 
     <select id="getDauHourCount" resultMap="hourMap">
-        select loghour, count(*) cnt from USER.mall_dau where logdate=#{date}
+        select loghour, count(*) cnt from MALL_DAU where logdate=#{date}
         group by loghour
     </select>
 

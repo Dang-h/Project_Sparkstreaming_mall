@@ -8,7 +8,10 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/mall_publisher2/pom.xml" />
         <option value="$PROJECT_DIR$/mall_logger/pom.xml" />
+        <option value="$PROJECT_DIR$/../gmall0311-parent-master/dw-chart/pom.xml" />
+        <option value="$PROJECT_DIR$/dw-chart/pom.xml" />
       </list>
     </option>
   </component>

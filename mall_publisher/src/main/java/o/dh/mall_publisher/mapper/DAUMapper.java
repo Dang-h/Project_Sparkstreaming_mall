@@ -1,4 +1,4 @@
-package mall_publisher.mapper;
+package o.dh.mall_publisher.mapper;
 
 import java.util.List;
 import java.util.Map;

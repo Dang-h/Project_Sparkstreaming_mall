@@ -51,6 +51,7 @@ public class CanalClient {
 						}
 
 						//得到rowDataList
+						assert rowChange != null;
 						List<CanalEntry.RowData> rowDatasList = rowChange.getRowDatasList();
 						//得到操作的表,不同的表可能需要发送到不同的topic中
 						String tableName = entry.getHeader().getTableName();
@@ -65,8 +66,6 @@ public class CanalClient {
 				}
 
 			}
-
-
 		}
 	}
 }

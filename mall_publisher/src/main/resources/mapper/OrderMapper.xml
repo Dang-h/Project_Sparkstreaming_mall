@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="mall_publisher.mapper.OrderMapper">
+<mapper namespace="o.dh.mall_publisher.mapper.OrderMapper">
     <select id="getOrderAmount" resultType="java.lang.Double">
-        select sum(total_amount) as totoal_amount from USER.mall_order_info where create_date=#{date}
+        select sum(total_amount) as totoal_amount from mall_order_info where create_date=#{date}
     </select>
 
     <select id="getOrderHourAmount" resultMap="hourMap">
         select create_hour, sum(total_amount) total_amount
-        from USER.mall_order_info where create_date = #{date} group by create_hour
+        from mall_order_info where create_date = #{date} group by create_hour
     </select>
 
-    <resultMap id="hourMap" type="com.atguigu.gmall2019.dw.publisher.bean.OrderHourAmount" autoMapping="true">
-        <result column="TOTAL_AMOUNT" property="sumOrderAmount"></result>
+    <!--在application.properties中加下划线转驼峰配置，就可自动转换-->
+    <resultMap id="hourMap" type="o.dh.mall_publisher.bean.OrderHourAmount" autoMapping="true">
+        <!--可自定义列名格式，比如：原表字段名为：TOTAL_AMOUNT，导入后改成sumOrderAmount-->
+        <result column="TOTAL_AMOUNT" property="sumOrderAmount"/>
     </resultMap>
 </mapper>
