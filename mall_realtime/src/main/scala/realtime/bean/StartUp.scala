@@ -7,7 +7,7 @@ package realtime.bean
  * @param appid   应用id
  * @param area    城市
  * @param os      操作系统
- * @param ch      软件来源t
+ * @param ch      软件来源
  * @param `type` 日志类型
  * @param vs      版本号
  * @param logDate 日志产生日期

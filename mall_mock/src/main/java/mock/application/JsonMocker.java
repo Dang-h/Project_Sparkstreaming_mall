@@ -30,7 +30,7 @@ public class JsonMocker {
 	};
 	RandomOptionGroup<String> areaOptionGroup = new RandomOptionGroup(areaOpts);
 
-	String appId = "gmall2019";
+	String appId = "mall2020";
 
 	RanOpt[] vsOpts = {
 			new RanOpt("1.2.0", 50), new RanOpt("1.1.2", 15),
@@ -94,17 +94,17 @@ public class JsonMocker {
 
 	/**
 	 * 生成事件日志<br>
-	 * `type` string   COMMENT '日志类型',<br>
-	 * `mid` string COMMENT '设备唯一 表示',<br>
-	 * `uid` string COMMENT '用户标识',<br>
-	 * `os` string COMMENT '操作系统',<br>
-	 * `appid` string COMMENT '应用id',<br>
-	 * `area` string COMMENT '地区' ,<br>
-	 * `evid` string COMMENT '事件id',<br>
-	 * `pgid` string COMMENT '当前页',<br>
-	 * `npgid` string COMMENT '跳转页',<br>
-	 * `itemid` string COMMENT '商品编号',<br>
-	 * `ts` bigint COMMENT '时间',
+	 * `type` 	 日志类型,		<br>
+	 * `mid` 	 设备唯一 表示,	<br>
+	 * `uid` 	 用户标识,		<br>
+	 * `os` 	 操作系统,		<br>
+	 * `appid` 	 应用id,		<br>
+	 * `area` 	 地区 ,			<br>
+	 * `evid` 	 事件id,		<br>
+	 * `pgid` 	 当前页,		<br>
+	 * `npgid` 	 跳转页,		<br>
+	 * `itemid`  商品编号,		<br>
+	 * `ts` 	 时间,
 	 *
 	 * @param startLogJson
 	 * @return
@@ -154,8 +154,8 @@ public class JsonMocker {
 		String initStartupLog () {
 
 			//mid编号为1-500随机数
-			String mid = "mid_" + RandomNum.getRandInt(1, 500);
-			String uid = "uid_" + RandomNum.getRandInt(1, 500);
+			String mid = "mid_" + RandomNum.getRandInt(1, 20);
+			String uid = "uid_" + RandomNum.getRandInt(1, 500);//为了出发预警，适当调高
 			String os = osOptionGroup.getRandomOpt().getValue();
 			String appid = this.appId;
 			String area = areaOptionGroup.getRandomOpt().getValue();

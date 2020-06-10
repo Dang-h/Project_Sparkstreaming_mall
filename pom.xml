@@ -22,7 +22,7 @@
         <module>mall_logger</module>
         <module>mall_realtime</module>
         <module>mall_publisher</module>
-        <module>mall_publisher2</module>
+        <module>mall_chart</module>
         <module>mall_canal</module>
     </modules>
 

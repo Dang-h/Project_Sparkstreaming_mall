@@ -8,9 +8,9 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>mall_publisher2</artifactId>
+    <artifactId>mall_publisher</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>mall_publisher2</name>
+    <name>mall_publisher</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>

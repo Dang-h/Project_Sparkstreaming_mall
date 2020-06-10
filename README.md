@@ -1,11 +1,11 @@
 # sparkStreaming 实战
 ## 架构
 ## 需求
-- 当日用户首次登录 （日活） 分时趋势图，昨日对比
+- 当日用户首次登录 （[日活](mall_realtime/src/main/scala/realtime/application/AlertApp.scala)） 分时趋势图，昨日对比
 - 当日新增用户及分时趋势图，昨日对比
-- 当日交易额及分时趋势图，昨日对比
+- 当日[交易额](mall_realtime/src/main/scala/realtime/application/OrderApp.scala)及分时趋势图，昨日对比
 - 当日订单数及分时趋势图，昨日对比
-- 购物券功能风险预警
+- [购物券功能风险预警](mall_realtime/src/main/scala/realtime/application/AlertApp.scala)
 - 用户购买明细灵活分析功能
 ## 模块说明
 |模块名|说明|

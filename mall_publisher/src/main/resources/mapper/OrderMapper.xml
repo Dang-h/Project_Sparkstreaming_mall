@@ -16,4 +16,6 @@
         <!--可自定义列名格式，比如：原表字段名为：TOTAL_AMOUNT，导入后改成sumOrderAmount-->
         <result column="TOTAL_AMOUNT" property="sumOrderAmount"/>
     </resultMap>
+
+    
 </mapper>
