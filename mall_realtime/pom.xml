@@ -74,7 +74,7 @@
             <version>2.7.8</version>
         </dependency>
 
-
+        <!--专业Scala解析JSON工具,需要隐式转换implicit val formats = org.json4s.DefaultFormats-->
         <dependency>
             <groupId>org.json4s</groupId>
             <artifactId>json4s-native_2.11</artifactId>

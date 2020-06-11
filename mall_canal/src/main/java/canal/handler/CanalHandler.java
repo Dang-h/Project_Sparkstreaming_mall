@@ -43,6 +43,14 @@ public class CanalHandler {
 				//发送数据
 				sendKafka(rowData, MallConstants.KAFKA_TOPIC_NEW_ORDER);
 			}
+		}else if(tableName.equals("order_detail")&&eventType.equals(CanalEntry.EventType.INSERT)){
+			for (CanalEntry.RowData rowData : rowDataList) {
+				sendKafka(  rowData, MallConstants.KAFKA_TOPIC_ORDER_DETAIL);
+			}
+		}else if(tableName.equals("user_info")&&(eventType.equals(CanalEntry.EventType.INSERT)||eventType.equals(CanalEntry.EventType.UPDATE))){
+			for (CanalEntry.RowData rowData : rowDataList) {
+				sendKafka(  rowData, MallConstants.KAFKA_TOPIC_USER_INFO);
+			}
 		}
 	}
 

@@ -50,8 +50,8 @@ public class JsonMocker {
      */
 	RanOpt[] eventOpts = {
 			new RanOpt("addFavor", 10), new RanOpt("addComment", 15),
-			new RanOpt("addCart", 15), new RanOpt("clickItem", 20),
-			new RanOpt("coupon", 40)
+			new RanOpt("addCart", 20), new RanOpt("clickItem", 1),
+			new RanOpt("coupon", 45)
 	};
 
 	RandomOptionGroup<String> eventOptionGroup = new RandomOptionGroup(eventOpts);
@@ -154,7 +154,7 @@ public class JsonMocker {
 		String initStartupLog () {
 
 			//mid编号为1-500随机数
-			String mid = "mid_" + RandomNum.getRandInt(1, 20);
+			String mid = "mid_" + RandomNum.getRandInt(1, 10);
 			String uid = "uid_" + RandomNum.getRandInt(1, 500);//为了出发预警，适当调高
 			String os = osOptionGroup.getRandomOpt().getValue();
 			String appid = this.appId;

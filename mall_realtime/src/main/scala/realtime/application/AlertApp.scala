@@ -1,6 +1,8 @@
 package realtime.application
 
+import java.text.SimpleDateFormat
 import java.util
+import java.util.Date
 
 import com.alibaba.fastjson.JSON
 import constant.MallConstants
@@ -43,9 +45,11 @@ object AlertApp {
 		eventInfoDstream.cache()
 
 		//    1 ) 5分钟内 --> 窗口大小  window      窗口 （窗口大小，滑动步长 ）   窗口大小 数据的统计范围    滑动步长 统计频率
+		// FIXME 是否可以用
 		val eventWindowDStream: DStream[EventInfo] = eventInfoDstream.window(Seconds(300), Seconds(5))
 		//    2) 同一设备	按照mid分组
-		val groupByMidDstream: DStream[(String, Iterable[EventInfo])] = eventWindowDStream.map(eventInfo => (eventInfo.mid, eventInfo)).groupByKey()
+		val groupByMidDstream: DStream[(String, Iterable[EventInfo])] = eventWindowDStream.map(eventInfo =>
+			(eventInfo.mid, eventInfo)).groupByKey()
 
 		//    3 ) 用三次及以上不同账号登录并领取优惠劵     没有 浏览商品
 		// 判断预警
@@ -82,25 +86,28 @@ object AlertApp {
 				(couponUidSet.size >= 3 && !hasClickItem, AlertInfo(mid, couponUidSet, itemsSet, eventList, System.currentTimeMillis())) //（是否符合条件 ，日志信息）
 		}
 
-//		checkedDstream.foreachRDD{rdd =>
-//			println(rdd.collect().mkString("\n"))
-//		}
+		checkedDstream.foreachRDD { rdd =>
+			println(rdd.collect().mkString("\n"))
+		}
 
 		val alterDstream: DStream[AlertInfo] = checkedDstream.filter(_._1).map(_._2)
 
-//		alterDstream.foreachRDD{rdd =>
-//			println("-------------------")
-//			println(rdd.collect().mkString("\n"))
-//			println("-------------------")
-//		}
+		alterDstream.foreachRDD { rdd =>
+			println("-------------------")
+			println("预警：")
+			println(rdd.collect().mkString("\n"))
+			println()
+			println("-------------------")
+		}
 
 
 		// 保存到ES中
 		alterDstream.foreachRDD { rdd =>
 			rdd.foreachPartition { alertItr =>
 				val list: List[AlertInfo] = alertItr.toList
-				//提取主键  // mid + 分钟 组合成主键 同时 也利用主键进行去重
-				val alterListWithId: List[(String, AlertInfo)] = list.map(alertInfo => (alertInfo.mid + "_" + alertInfo.ts / 1000 / 60, alertInfo))
+				//提取主键(_id) --> mid + 时间; 同时 也利用主键进行去重
+				val alterListWithId: List[(String, AlertInfo)] = list.map(alertInfo =>
+					(alertInfo.mid + "_" + timestamp2Date(alertInfo.ts), alertInfo))
 
 				//批量保存
 				MyEsUtil.indexBulk(MallConstants.ES_INDEX_ALTER, alterListWithId)
@@ -114,5 +121,10 @@ object AlertApp {
 		ssc.start()
 		ssc.awaitTermination()
 
+	}
+
+	def timestamp2Date(ts: Long): String = {
+		val date: String = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(new Date(ts))
+		date
 	}
 }

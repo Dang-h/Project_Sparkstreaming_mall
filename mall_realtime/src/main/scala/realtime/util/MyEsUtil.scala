@@ -48,19 +48,27 @@ object MyEsUtil {
 
 	}
 
-	// batch
-	def indexBulk(indexName:String , dataList: List[(String,Any)]): Unit ={
-		if(dataList.size>0){
+	/**
+	 * 批量保存数据导入ES
+	 *
+	 * @param indexName 索引名
+	 * @param dataList 数据（List[(_id（String），_source（Any）)]）
+	 */
+	def indexBulk(indexName: String, dataList: List[(String, Any)]): Unit = {
+
+		if (dataList.nonEmpty) {
 			val jestClient: JestClient = getClient
 			val bulkBuilder = new Bulk.Builder
-			for ((id,data) <- dataList ) {
-				val index = new Index.Builder(data).index(indexName).`type`("_doc").id(id) .build()
+			for ((id, data) <- dataList) {
+				val index = new Index.Builder(data).index(indexName).`type`("_doc").id(id).build()
 				bulkBuilder.addAction(index)
 			}
-			// local
+
 			val bulk: Bulk = bulkBuilder.build()
-			val items: util.List[BulkResult#BulkResultItem] = jestClient.execute(bulk).getFailedItems
-			println("保存"+items.mkString(",")+"条")
+			val items: util.List[BulkResult#BulkResultItem] = jestClient.execute(bulk).getItems
+			// 抓异常（getFailedItems）
+//			val items: util.List[BulkResult#BulkResultItem] = jestClient.execute(bulk).getFailedItems
+			println("保存" + items.size() + "条")
 			close(jestClient)
 
 		}
@@ -80,14 +88,15 @@ object MyEsUtil {
 		PUT _index/_type/_id
 		{_source  (case class)}
 		 */
-		val index = new Index.Builder(CustomerTest("li4",1000.0)).index("customer_test").`type`("_doc").id("2")
+		// 若_id相同，则会替换相同_id的数据
+		val index = new Index.Builder(CustomerTest("test", 1110.0)).index("customer_test").`type`("_doc").id("2")
 		  .build()
 		val message: String = jestClient.execute(index).getErrorMessage
 		println(s"message = ${message}")
 		close(jestClient)
 	}
 
-	case class CustomerTest(customer_name:String,customer_amount :Double)
+	case class CustomerTest(customer_name: String, customer_amount: Double)
 
 
 }
