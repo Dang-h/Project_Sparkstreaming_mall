@@ -16,3 +16,8 @@
 |[mall_publisher](mall_publisher/mall_publisher.md)|灵活查询数据接口模块|
 |mall_realtime|实时处理模块|
 |mall_canal|canal客户端，用于同步业务数据库中的数据|
+
+## 技术点
+- 双流Join
+- 读取Kafka中数据
+- Canal监控MySQL数据，并导入Kafka

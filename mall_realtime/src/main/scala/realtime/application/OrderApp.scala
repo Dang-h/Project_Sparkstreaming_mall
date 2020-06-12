@@ -3,8 +3,9 @@ package realtime.application
 import com.alibaba.fastjson.JSON
 import constant.MallConstants
 import org.apache.hadoop.conf.Configuration
+import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.spark.SparkConf
-import org.apache.spark.streaming.dstream.DStream
+import org.apache.spark.streaming.dstream.{DStream, InputDStream}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import realtime.bean.OrderInfo
 import realtime.util.MyKafkaUtil
@@ -20,7 +21,7 @@ object OrderApp {
 		val ssc = new StreamingContext(sparkConf, Seconds(5))
 
 		//从kafka获取数据
-		val inputDStream = MyKafkaUtil.getKafkaStream(MallConstants.KAFKA_TOPIC_NEW_ORDER, ssc)
+		val inputDStream: InputDStream[ConsumerRecord[String, String]] = MyKafkaUtil.getKafkaStream(MallConstants.KAFKA_TOPIC_ORDER, ssc)
 
 		//补充时间戳、敏感字段脱敏（电话、收件人地址···）
 		val oderDStream: DStream[OrderInfo] = inputDStream.map {

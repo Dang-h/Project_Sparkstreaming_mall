@@ -6,6 +6,7 @@ import com.alibaba.otter.canal.protocol.CanalEntry;
 import constant.MallConstants;
 
 import java.util.List;
+import java.util.Random;
 
 
 //业务的具体处理
@@ -20,10 +21,9 @@ public class CanalHandler {
 	List<CanalEntry.RowData> rowDataList;
 
 	/**
-	 *
-	 * @param  tableName   表名
-	 * @param  eventType   操作类型
-	 * @param  rowDataList 数据
+	 * @param tableName   表名
+	 * @param eventType   操作类型
+	 * @param rowDataList 数据
 	 * @return
 	 */
 	public CanalHandler(String tableName, CanalEntry.EventType eventType, List<CanalEntry.RowData> rowDataList) {
@@ -41,21 +41,24 @@ public class CanalHandler {
 			//处理数据
 			for (CanalEntry.RowData rowData : rowDataList) {
 				//发送数据
-				sendKafka(rowData, MallConstants.KAFKA_TOPIC_NEW_ORDER);
+				sendKafka(rowData, MallConstants.KAFKA_TOPIC_ORDER);
 			}
-		}else if(tableName.equals("order_detail")&&eventType.equals(CanalEntry.EventType.INSERT)){
+			// 监控新增
+		} else if (tableName.equals("order_detail") && eventType.equals(CanalEntry.EventType.INSERT)) {
 			for (CanalEntry.RowData rowData : rowDataList) {
-				sendKafka(  rowData, MallConstants.KAFKA_TOPIC_ORDER_DETAIL);
+				sendKafka(rowData, MallConstants.KAFKA_TOPIC_ORDER_DETAIL);
 			}
-		}else if(tableName.equals("user_info")&&(eventType.equals(CanalEntry.EventType.INSERT)||eventType.equals(CanalEntry.EventType.UPDATE))){
+			// 监控新增和修改
+		} else if (tableName.equals("user_info") && (eventType.equals(CanalEntry.EventType.INSERT) || eventType.equals(CanalEntry.EventType.UPDATE))) {
 			for (CanalEntry.RowData rowData : rowDataList) {
-				sendKafka(  rowData, MallConstants.KAFKA_TOPIC_USER_INFO);
+				sendKafka(rowData, MallConstants.KAFKA_TOPIC_USER_INFO);
 			}
 		}
 	}
 
 	/**
 	 * 发送数据到Kafka对应的Topic中
+	 *
 	 * @param rowData 行数据
 	 * @param topic   发送到的kafka的主题
 	 */
@@ -73,6 +76,12 @@ public class CanalHandler {
 		}
 		String rowJSON = jsonObject.toJSONString();
 		MyKafkaSender.send(topic, rowJSON);
+
+//		try {
+//			Thread.sleep(new Random().nextInt(2) * 1000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 	}
 }
 
