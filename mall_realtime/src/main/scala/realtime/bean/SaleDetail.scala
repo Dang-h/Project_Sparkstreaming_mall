@@ -11,10 +11,10 @@ import java.util
  * @param order_status    订单状态
  * @param create_time     创建时间
  * @param user_id         用户id
- * @param sku_id          sku_id
  * @param user_gender     用户性别
  * @param user_age        用户年龄
  * @param user_level      用户等级
+ * @param sku_id          sku_id
  * @param sku_price       订单金额
  * @param sku_name        商品名称
  * @param dt              操作时间

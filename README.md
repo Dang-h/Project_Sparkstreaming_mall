@@ -18,6 +18,8 @@
 |mall_canal|canal客户端，用于同步业务数据库中的数据|
 
 ## 技术点
-- 双流Join
-- 读取Kafka中数据
-- Canal监控MySQL数据，并导入Kafka
+
+- [读取日志服务器日志并导入Kafka](mall_logger/src/main/java/o/dh/mall_logger/controller/LoggerController.java)
+- [双流Join](mall_realtime/src/main/scala/realtime/application/SaleApp.scala)
+- [读取Kafka中数据（kafka自动提交偏移量）](mall_realtime/src/main/scala/realtime/util/MyKafkaUtil.scala)
+- [Canal监控MySQL数据，并导入Kafka](mall_canal/src/main/java/canal/client/CanalClient.java)

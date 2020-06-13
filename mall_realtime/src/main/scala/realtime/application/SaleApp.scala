@@ -10,8 +10,8 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.streaming.dstream.{DStream, InputDStream}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.json4s.native.Serialization
-import realtime.bean.{OrderDetail, OrderInfo, SaleDetail}
-import realtime.util.MyKafkaUtil
+import realtime.bean.{OrderDetail, OrderInfo, SaleDetail, UserInfo}
+import realtime.util.{MyEsUtil, MyKafkaUtil}
 import redis.clients.jedis.Jedis
 
 import scala.collection.mutable.ListBuffer
@@ -29,7 +29,7 @@ object SaleApp {
 
 		orderRecordDstream.foreachRDD(rdd => println(rdd.map(_.value()).collect().mkString("\n")))
 
-		orderDetailRecordDstream.foreachRDD (rdd => println(rdd.map(_.value()).collect().mkString("\n")))
+		orderDetailRecordDstream.foreachRDD(rdd => println(rdd.map(_.value()).collect().mkString("\n")))
 
 
 		// 将ConsumerRecord转给换成DStream
@@ -64,12 +64,13 @@ object SaleApp {
 		// orderInfo JOIN orderDetail
 		val fullJoinDstream: DStream[(String, (Option[OrderInfo], Option[OrderDetail]))] = orderInfoWithKeyDstream.fullOuterJoin(orderDetailWithKeyDstream)
 
-		fullJoinDstream.flatMap {
+		val saleDetailDstream: DStream[SaleDetail] = fullJoinDstream.flatMap {
+			// 结果（orderId, (orderInfo，orderDetail)）
 			case (orderId, (orderInfoOpt, orderDetailOpt)) =>
 
 				val saleDetailList: ListBuffer[SaleDetail] = ListBuffer[SaleDetail]()
 				val jedis = new Jedis("hadoop101", 6379)
-				//使用json4s 工具把orderInfo 解析为json
+				//使用json4s工具把orderInfo解析为json
 				implicit val formats = org.json4s.DefaultFormats
 
 				// 如果主表：orderInfoOpt != none
@@ -85,7 +86,7 @@ object SaleApp {
 						val saleDetail = new SaleDetail(orderInfo, orderDetail)
 						saleDetailList += saleDetail
 					}
-					// 2 type为set
+					// 2 (type为set)
 					// key
 					val orderInfoKey: String = "order_info:" + orderInfo.id
 					// value(将caseClass解析成Json)
@@ -126,13 +127,57 @@ object SaleApp {
 						saleDetailList += saleDetail
 					}
 				}
-
 				jedis.close()
 
 				saleDetailList
 		}
 
+		// user新增数据写入缓存
+		userRecordDstream.map { record =>
+			val jsonStr: String = record.value()
+			val userInfo: UserInfo = JSON.parseObject(jsonStr, classOf[UserInfo])
+			userInfo
+		}.foreachRDD { rdd =>
+			rdd.foreachPartition { userInfoItr =>
+				val jedis = new Jedis("hadoop100", 6379)
+				implicit val format = org.json4s.DefaultFormats
 
+				for (userInfo <- userInfoItr) {
+					val userInfoJson: String = Serialization.write(userInfo)
+					val userInfoKey: String = "userInfo:" + userInfo.id
+					jedis.set(userInfoKey, userInfoJson)
+				}
+
+				jedis.close()
+			}
+		}
+
+		// 与User信息关联
+		val resultSaleDetailDstream: DStream[SaleDetail] = saleDetailDstream.mapPartitions { saleDetailItr =>
+			val jedis = new Jedis("hadoop100", 6379)
+			val saleDetailList = new ListBuffer[SaleDetail]
+			for (saleDetail <- saleDetailItr) {
+				// 查询缓存
+				val userInfoJson: String = jedis.get("user_info:" + saleDetail.user_id)
+
+				if (userInfoJson != null) {
+					val userInfo: UserInfo = JSON.parseObject(userInfoJson, classOf[UserInfo])
+					// 合并数据
+					saleDetail.mergeUserInfo(userInfo)
+				}
+				saleDetailList += saleDetail
+			}
+			jedis.close()
+			saleDetailList.toIterator
+		}
+
+		// 存入ES
+		resultSaleDetailDstream.foreachRDD { rdd =>
+			rdd.foreachPartition { saleDetailItr =>
+				val dataList: List[(String, SaleDetail)] = saleDetailItr.map(saleDetail => (saleDetail.order_detail_id, saleDetail)).toList
+				MyEsUtil.indexBulk(MallConstants.ES_INDEX_SALE_DETAIL, dataList)
+			}
+		}
 
 		ssc.start()
 		ssc.awaitTermination()
