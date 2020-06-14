@@ -48,7 +48,7 @@ public class CanalHandler {
 			for (CanalEntry.RowData rowData : rowDataList) {
 				sendKafka(rowData, MallConstants.KAFKA_TOPIC_ORDER_DETAIL);
 			}
-			// 监控新增和修改
+			// 监控用户新增和修改
 		} else if (tableName.equals("user_info") && (eventType.equals(CanalEntry.EventType.INSERT) || eventType.equals(CanalEntry.EventType.UPDATE))) {
 			for (CanalEntry.RowData rowData : rowDataList) {
 				sendKafka(rowData, MallConstants.KAFKA_TOPIC_USER_INFO);

@@ -1,5 +1,6 @@
 # sparkStreaming 实战
 ## 架构
+![架构](assert/架构.png)
 ## 需求
 - 当日用户首次登录 （[日活](mall_realtime/src/main/scala/realtime/application/AlertApp.scala)） 分时趋势图，昨日对比
 - 当日新增用户及分时趋势图，昨日对比

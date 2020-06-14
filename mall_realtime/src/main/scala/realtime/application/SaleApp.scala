@@ -152,7 +152,7 @@ object SaleApp {
 			}
 		}
 
-		// 与User信息关联
+		// 与新增User信息关联
 		val resultSaleDetailDstream: DStream[SaleDetail] = saleDetailDstream.mapPartitions { saleDetailItr =>
 			val jedis = new Jedis("hadoop100", 6379)
 			val saleDetailList = new ListBuffer[SaleDetail]
